@@ -26,13 +26,13 @@ sections:
       # Need a custom icon?
       # Add an SVG image to the `assets/media/icons/` folder and reference it in the `icon` field below
       buttons:
-        - text: Read my latest paper on LLMs
+        - text: 我的NUIST个人主页
           icon: academicons/arxiv
-          url: https://arxiv.org/abs/2304.01852
-        - text: Watch my new YouTube video to achieve 20x productivity
-          icon: brands/youtube
-          url: https://youtube.com
-        - text: Connect with me on LinkedIn
-          icon: brands/linkedin
-          url: https://linkedin.com
+          url: https://faculty.nuist.edu.cn/tianwen/zh_CN/index.htm
+        - text: IEEE主页
+          icon: brands/ieee
+          url: https://ieeexplore.ieee.org/author/37088370173
+        - text: 课题组研究方向
+          icon: hero/academic-cap
+          url: /research/
 ---

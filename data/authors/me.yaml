@@ -2,31 +2,11 @@ schema: "hugoblox/author/v1"
 slug: "me"
 is_owner: true
 name:
-  display: "Wen Tian's research group"
+  display: "田 文"
   given: "Alex"
   family: "Johnson"
-  pronouns: "he/him"
-status:
-  icon: "🚀"
-role: "Senior AI Research Scientist"
+role: "南京信息工程大学副教授"
 bio: "田文，博士，副教授，硕士研究生导师，入选江苏省青年托举人才项目，IEEE Senior Member，中国宇航技术及其应用标准化技术委员会委员。主持国家自然科学金，国防类课题，江苏省自然科学基金，江苏省高校面上项目，东南大学开放基金课题（子课题）和江苏省创新计划等纵向项目7项，主持横向项目3项。担任IEEE COMMAG CFP编辑，在IEEE JSAC, IEEE TWC, IEEE TCOM, IEEE TSG，IEEE IoT，IEEE TVT,IEEE TGCN和IEEE SJ等顶级SCI期刊上发表论文30余篇，出版学术专著2本。曾于2020年获得国家留学基金委CSC公派出国联合培养博士生资格，联系导师为美国休斯敦大学Zhu Han教授（IEEE Fellow）。当前是IEEE TCOM,IEEE TWC,IEEE TIFS, IEEE TSG, IEEE TII，IEEE TVT, IEEE TGCN, IEEE IoTJ,IEEE COMMAG,IEEE WCM等多个Top SCI期刊审稿人。当前研究兴趣为无线隐蔽通信和水声通信安全等。\n"
-affiliations:
-  - name: "Meta AI"
-    url: "https://ai.meta.com/"
-links:
-  - icon: "at-symbol"
-    url: "mailto:alex.johnson@meta.com"
-    label: "E-mail Me"
-  - icon: "brands/x"
-    url: "https://x.com/AlexAIResearch"
-  - icon: "brands/github"
-    url: "https://github.com/alexjohnsonai"
-  - icon: "brands/linkedin"
-    url: "https://www.linkedin.com/in/alexjohnsonai/"
-  - icon: "academicons/google-scholar"
-    url: "https://scholar.google.com/citations?user=alexjohnson"
-  - icon: "academicons/orcid"
-    url: "https://orcid.org/0000-0002-1825-0097"
 interests:
   - "Large Language Models"
   - "Computer Vision"
