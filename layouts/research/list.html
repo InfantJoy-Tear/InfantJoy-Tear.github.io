@@ -1,213 +1,110 @@
 <!doctype html>
-<html lang="{{ .Site.Language.Lang | default "zh-CN" }}">
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ .Title }} | {{ with site.Params.hugoblox.identity.name }}{{ . }}{{ else }}田 文{{ end }}</title>
-  <meta name="description" content="{{ .Description }}">
+  <title>课题组研究方向 | 田文课题组</title>
+  <meta name="description" content="田文课题组围绕隐蔽通信、通信与感知一体化、博弈论开展研究。">
   <style>
     :root {
-      color-scheme: light;
-      --ink: #152033;
-      --muted: #5f6b7a;
-      --line: #d9e0e8;
+      --ink: #102033;
+      --muted: #5b6776;
+      --soft: #f5f7fa;
       --paper: #ffffff;
-      --wash: #f6f8fb;
-      --accent: #1f6f8b;
-      --accent-soft: #e6f2f5;
+      --line: #dbe2ea;
+      --navy: #17395c;
+      --teal: #1e6f70;
+      --teal-soft: #e9f3f2;
+      --shadow: 0 18px 46px rgba(16, 32, 51, 0.08);
     }
 
     * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        linear-gradient(135deg, rgba(228, 238, 232, 0.9), rgba(248, 224, 234, 0.72)),
-        var(--wash);
-      letter-spacing: 0;
-    }
-
+    body { margin: 0; color: var(--ink); background: var(--soft); font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif; letter-spacing: 0; }
     a { color: inherit; text-decoration: none; }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      width: min(1040px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 28px 0 18px;
-      font-size: 14px;
-      color: var(--muted);
-    }
+    .site-header { border-bottom: 1px solid var(--line); background: #fff; }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: min(1140px, calc(100% - 40px)); min-height: 68px; margin: 0 auto; }
+    .brand { display: grid; gap: 2px; }
+    .brand strong { font-size: 18px; }
+    .brand span { color: var(--muted); font-size: 12px; }
+    .nav-links { display: flex; gap: 22px; color: #2c3d50; font-size: 14px; font-weight: 800; }
+    .nav-links a:hover { color: var(--teal); }
 
-    .home-link {
-      color: var(--ink);
-      font-weight: 700;
-    }
+    .hero-band { background: linear-gradient(135deg, var(--navy), var(--teal)); color: #fff; }
+    .hero { width: min(1140px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0 66px; }
+    .eyebrow { margin: 0 0 14px; color: #cde8e3; font-size: 13px; font-weight: 900; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(38px, 7vw, 68px); line-height: 1.06; letter-spacing: 0; }
+    .lede { max-width: 760px; margin: 20px 0 0; color: rgba(255,255,255,.84); font-size: 18px; line-height: 1.85; }
 
-    .shell {
-      width: min(1040px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 44px 0 72px;
-    }
+    .section { width: min(1140px, calc(100% - 40px)); margin: 0 auto; padding: 64px 0 80px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .card { display: flex; flex-direction: column; justify-content: space-between; min-height: 280px; padding: 26px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); box-shadow: var(--shadow); transition: transform 160ms ease, border-color 160ms ease; }
+    .card:hover { transform: translateY(-3px); border-color: rgba(30, 111, 112, .48); }
+    .tag { display: inline-flex; width: fit-content; min-width: 52px; min-height: 34px; align-items: center; justify-content: center; padding: 0 11px; border-radius: 6px; background: var(--teal-soft); color: var(--teal); font-size: 13px; font-weight: 900; }
+    h2 { margin: 22px 0 10px; font-size: 25px; line-height: 1.28; letter-spacing: 0; }
+    p { color: var(--muted); line-height: 1.75; }
+    .card p { margin: 0; }
+    .card-link { margin-top: 24px; color: var(--teal); font-size: 14px; font-weight: 900; }
+    .note { margin-top: 28px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--muted); line-height: 1.75; }
 
-    .hero {
-      max-width: 760px;
-      padding-bottom: 34px;
-      border-bottom: 1px solid rgba(21, 32, 51, 0.12);
-    }
-
-    .eyebrow {
-      margin: 0 0 14px;
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(34px, 7vw, 64px);
-      line-height: 1.06;
-      letter-spacing: 0;
-    }
-
-    .lede {
-      margin: 18px 0 0;
-      max-width: 680px;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.8;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 34px;
-    }
-
-    .card {
-      display: flex;
-      min-height: 230px;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.82);
-      box-shadow: 0 18px 45px rgba(21, 32, 51, 0.08);
-      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-    }
-
-    .card:hover,
-    .card:focus-visible {
-      transform: translateY(-3px);
-      border-color: rgba(31, 111, 139, 0.55);
-      box-shadow: 0 24px 54px rgba(21, 32, 51, 0.12);
-      outline: none;
-    }
-
-    .mark {
-      display: inline-flex;
-      width: 44px;
-      height: 44px;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(31, 111, 139, 0.24);
-      border-radius: 8px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .card h2 {
-      margin: 28px 0 8px;
-      font-size: 23px;
-      line-height: 1.25;
-      letter-spacing: 0;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.7;
-    }
-
-    .card span:last-child {
-      margin-top: 24px;
-      color: var(--accent);
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    footer {
-      width: min(1040px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 0 0 28px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    @media (max-width: 820px) {
-      .grid { grid-template-columns: 1fr; }
-      .shell { padding-top: 30px; }
-      .topbar { width: min(100% - 28px, 1040px); }
-      .shell, footer { width: min(100% - 28px, 1040px); }
-      .card { min-height: 190px; }
-    }
+    @media (max-width: 860px) { .nav { align-items: flex-start; flex-direction: column; padding: 16px 0; } .nav-links { flex-wrap: wrap; gap: 14px; } .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .nav, .hero, .section { width: min(100% - 28px, 1140px); } .card { min-height: 220px; padding: 20px; } }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="home-link" href="{{ "/" | relURL }}">田 文</a>
-    <span>Research Directions</span>
+  <header class="site-header">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="/">
+        <strong>田文课题组</strong>
+        <span>Nanjing University of Information Science &amp; Technology</span>
+      </a>
+      <div class="nav-links">
+        <a href="/">首页</a>
+        <a href="/research/">研究方向</a>
+        <a href="/#publications">论文与项目</a>
+        <a href="/#destinations">学生去向</a>
+      </div>
+    </nav>
   </header>
 
-  <main class="shell">
-    <section class="hero" aria-labelledby="research-title">
-      <p class="eyebrow">Research Group</p>
-      <h1 id="research-title">课题组研究方向</h1>
-      <p class="lede">课题组围绕无线通信安全、智能无线网络与跨域融合感知开展研究，聚焦理论建模、系统优化与工程应用之间的结合。</p>
+  <main>
+    <section class="hero-band">
+      <div class="hero">
+        <p class="eyebrow">Research Directions</p>
+        <h1>课题组研究方向</h1>
+        <p class="lede">围绕无线通信安全与智能网络优化，当前重点聚焦隐蔽通信、通信与感知一体化、博弈论三个方向。</p>
+      </div>
     </section>
 
-    <section class="grid" aria-label="研究方向列表">
-      <a class="card" href="{{ "/research/covert-communication/" | relURL }}">
-        <div>
-          <span class="mark">CC</span>
-          <h2>隐蔽通信</h2>
-          <p>面向低可探测通信、无线安全传输与复杂电磁环境下的通信行为建模。</p>
-        </div>
-        <span>查看方向</span>
-      </a>
-
-      <a class="card" href="{{ "/research/isac/" | relURL }}">
-        <div>
-          <span class="mark">ISAC</span>
-          <h2>通信与感知一体化</h2>
-          <p>探索通信、感知、计算资源协同设计，服务下一代智能无线网络。</p>
-        </div>
-        <span>查看方向</span>
-      </a>
-
-      <a class="card" href="{{ "/research/game-theory/" | relURL }}">
-        <div>
-          <span class="mark">GT</span>
-          <h2>博弈论</h2>
-          <p>研究多主体交互、资源竞争与安全对抗场景中的策略分析与优化。</p>
-        </div>
-        <span>查看方向</span>
-      </a>
+    <section class="section" aria-label="研究方向列表">
+      <div class="grid">
+        <a class="card" href="/research/covert-communication/">
+          <div>
+            <span class="tag">CC</span>
+            <h2>隐蔽通信</h2>
+            <p>面向低可探测通信、无线安全传输与复杂电磁环境下的通信行为建模。</p>
+          </div>
+          <span class="card-link">查看方向</span>
+        </a>
+        <a class="card" href="/research/isac/">
+          <div>
+            <span class="tag">ISAC</span>
+            <h2>通信与感知一体化</h2>
+            <p>探索通信、感知、计算资源协同设计，服务下一代智能无线网络。</p>
+          </div>
+          <span class="card-link">查看方向</span>
+        </a>
+        <a class="card" href="/research/game-theory/">
+          <div>
+            <span class="tag">GT</span>
+            <h2>博弈论</h2>
+            <p>研究多主体交互、资源竞争与安全对抗场景中的策略分析与优化。</p>
+          </div>
+          <span class="card-link">查看方向</span>
+        </a>
+      </div>
+      <div class="note">每个方向页面已预留研究简介、关键问题、代表论文、相关项目和招收学生方向，后续可逐步补充。</div>
     </section>
   </main>
-
-  <footer>南京信息工程大学 · 课题组研究方向</footer>
 </body>
 </html>
