@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -49,6 +49,20 @@
 
     @media (max-width: 860px) { .nav { align-items: flex-start; flex-direction: column; padding: 16px 0; } .nav-links { flex-wrap: wrap; gap: 14px; } .grid { grid-template-columns: 1fr; } }
     @media (max-width: 560px) { .nav, .hero, .section { width: min(100% - 28px, 1140px); } .card { min-height: 220px; padding: 20px; } }
+  
+    .nav-item { position: relative; }
+    .nav-trigger { display: inline-flex; align-items: center; gap: 6px; }
+    .nav-trigger::after { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+    .dropdown-menu { position: absolute; left: 50%; top: calc(100% + 16px); display: grid; min-width: 220px; gap: 4px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; box-shadow: 0 18px 44px rgba(16,32,51,.14); opacity: 0; visibility: hidden; transform: translate(-50%, 8px); transition: opacity 140ms ease, transform 140ms ease, visibility 140ms ease; z-index: 30; }
+    .dropdown-menu::before { content: ""; position: absolute; left: 0; right: 0; top: -18px; height: 18px; }
+    .dropdown-menu a { display: block; padding: 10px 12px; border-radius: 6px; color: var(--ink); font-weight: 800; white-space: nowrap; }
+    .dropdown-menu a:hover, .dropdown-menu a:focus-visible { background: var(--teal-soft); color: var(--teal); outline: none; }
+    .has-dropdown:hover .dropdown-menu, .has-dropdown:focus-within .dropdown-menu { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+    @media (max-width: 860px) {
+      .dropdown-menu { position: static; min-width: 0; padding: 6px 0 0 12px; border: 0; box-shadow: none; opacity: 1; visibility: visible; transform: none; background: transparent; }
+      .dropdown-menu::before { display: none; }
+      .dropdown-menu a { padding: 6px 0; }
+    }
   </style>
 </head>
 <body>
@@ -60,7 +74,14 @@
       </a>
       <div class="nav-links">
         <a href="/">首页</a>
-        <a href="/research/">研究方向</a>
+        <div class="nav-item has-dropdown">
+          <a class="nav-trigger" href="/research/">研究方向</a>
+          <div class="dropdown-menu" aria-label="研究方向子菜单">
+            <a href="/research/covert-communication/">隐蔽通信</a>
+            <a href="/research/isac/">通信与感知一体化</a>
+            <a href="/research/game-theory/">博弈论</a>
+          </div>
+        </div>
         <a href="/#publications">论文与项目</a>
         <a href="/#destinations">学生去向</a>
       </div>
@@ -108,3 +129,4 @@
   </main>
 </body>
 </html>
+
