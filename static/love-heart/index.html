@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>love++</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #f6d8e2;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+
+    .message {
+      position: fixed;
+      z-index: 2;
+      top: 8vh;
+      left: 8vw;
+      color: #d72258;
+      font-size: clamp(24px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.4;
+      text-shadow: 0 4px 18px rgba(215, 34, 88, 0.18);
+      white-space: pre-line;
+    }
+
+    #blink {
+      display: inline-block;
+      margin-left: 4px;
+      color: #d72258;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="pinkboard"></canvas>
+  <div id="myContent" class="message"></div>
+  <div id="contentToWrite" hidden>姐姐
+我想你了</div>
+
+  <script>
+    const settings = {
+      particles: {
+        length: 500,
+        duration: 2,
+        velocity: 100,
+        effect: -0.75,
+        size: 30,
+      },
+    };
+
+    class Point {
+      constructor(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+      }
+
+      clone() {
+        return new Point(this.x, this.y);
+      }
+
+      length(length) {
+        if (typeof length === "undefined") {
+          return Math.sqrt(this.x * this.x + this.y * this.y);
+        }
+
+        this.normalize();
+        this.x *= length;
+        this.y *= length;
+        return this;
+      }
+
+      normalize() {
+        const length = this.length();
+        this.x /= length;
+        this.y /= length;
+        return this;
+      }
+    }
+
+    class Particle {
+      constructor() {
+        this.position = new Point();
+        this.velocity = new Point();
+        this.acceleration = new Point();
+        this.age = 0;
+      }
+
+      initialize(x, y, dx, dy) {
+        this.position.x = x;
+        this.position.y = y;
+        this.velocity.x = dx;
+        this.velocity.y = dy;
+        this.acceleration.x = dx * settings.particles.effect;
+        this.acceleration.y = dy * settings.particles.effect;
+        this.age = 0;
+      }
+
+      update(deltaTime) {
+        this.position.x += this.velocity.x * deltaTime;
+        this.position.y += this.velocity.y * deltaTime;
+        this.velocity.x += this.acceleration.x * deltaTime;
+        this.velocity.y += this.acceleration.y * deltaTime;
+        this.age += deltaTime;
+      }
+
+      draw(context, image) {
+        const ease = (t) => (--t) * t * t + 1;
+        const size = image.width * ease(this.age / settings.particles.duration);
+        context.globalAlpha = 1 - this.age / settings.particles.duration;
+        context.drawImage(
+          image,
+          this.position.x - size / 2,
+          this.position.y - size / 2,
+          size,
+          size
+        );
+      }
+    }
+
+    class ParticlePool {
+      constructor(length) {
+        this.particles = Array.from({ length }, () => new Particle());
+        this.firstActive = 0;
+        this.firstFree = 0;
+        this.duration = settings.particles.duration;
+      }
+
+      add(x, y, dx, dy) {
+        this.particles[this.firstFree].initialize(x, y, dx, dy);
+        this.firstFree++;
+
+        if (this.firstFree === this.particles.length) this.firstFree = 0;
+        if (this.firstActive === this.firstFree) this.firstActive++;
+        if (this.firstActive === this.particles.length) this.firstActive = 0;
+      }
+
+      update(deltaTime) {
+        if (this.firstActive < this.firstFree) {
+          for (let i = this.firstActive; i < this.firstFree; i++) {
+            this.particles[i].update(deltaTime);
+          }
+        }
+
+        if (this.firstFree < this.firstActive) {
+          for (let i = this.firstActive; i < this.particles.length; i++) {
+            this.particles[i].update(deltaTime);
+          }
+          for (let i = 0; i < this.firstFree; i++) {
+            this.particles[i].update(deltaTime);
+          }
+        }
+
+        while (
+          this.particles[this.firstActive].age >= this.duration &&
+          this.firstActive !== this.firstFree
+        ) {
+          this.firstActive++;
+          if (this.firstActive === this.particles.length) this.firstActive = 0;
+        }
+      }
+
+      draw(context, image) {
+        if (this.firstActive < this.firstFree) {
+          for (let i = this.firstActive; i < this.firstFree; i++) {
+            this.particles[i].draw(context, image);
+          }
+        }
+
+        if (this.firstFree < this.firstActive) {
+          for (let i = this.firstActive; i < this.particles.length; i++) {
+            this.particles[i].draw(context, image);
+          }
+          for (let i = 0; i < this.firstFree; i++) {
+            this.particles[i].draw(context, image);
+          }
+        }
+      }
+    }
+
+    function pointOnHeart(t) {
+      return new Point(
+        180 * Math.pow(Math.sin(t), 3),
+        160 * Math.cos(t) -
+          50 * Math.cos(2 * t) -
+          20 * Math.cos(3 * t) -
+          10 * Math.cos(4 * t) +
+          25
+      );
+    }
+
+    function createParticleImage() {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.width = settings.particles.size;
+      canvas.height = settings.particles.size;
+
+      function to(t) {
+        const point = pointOnHeart(t);
+        point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
+        point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
+        return point;
+      }
+
+      context.beginPath();
+      let t = -Math.PI;
+      let point = to(t);
+      context.moveTo(point.x, point.y);
+
+      while (t < Math.PI) {
+        t += 0.01;
+        point = to(t);
+        context.lineTo(point.x, point.y);
+      }
+
+      context.closePath();
+      context.fillStyle = "#fa759f";
+      context.fill();
+
+      const image = new Image();
+      image.src = canvas.toDataURL();
+      return image;
+    }
+
+    function startHeartAnimation() {
+      const canvas = document.getElementById("pinkboard");
+      const context = canvas.getContext("2d");
+      const particles = new ParticlePool(settings.particles.length);
+      const particleRate = settings.particles.length / settings.particles.duration;
+      const image = createParticleImage();
+      let time;
+
+      function onResize() {
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = Math.floor(canvas.clientWidth * ratio);
+        canvas.height = Math.floor(canvas.clientHeight * ratio);
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+
+      function render() {
+        requestAnimationFrame(render);
+
+        const newTime = Date.now() / 1000;
+        const deltaTime = newTime - (time || newTime);
+        time = newTime;
+
+        context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+        const amount = particleRate * deltaTime;
+        for (let i = 0; i < amount; i++) {
+          const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+          const dir = pos.clone().length(settings.particles.velocity);
+          particles.add(
+            canvas.clientWidth / 2 + pos.x,
+            canvas.clientHeight / 2 - pos.y,
+            dir.x,
+            -dir.y
+          );
+        }
+
+        particles.update(deltaTime);
+        particles.draw(context, image);
+      }
+
+      window.addEventListener("resize", onResize);
+      onResize();
+      render();
+    }
+
+    function startTyping() {
+      const output = document.getElementById("myContent");
+      const inputText = document.getElementById("contentToWrite").textContent.trim();
+      let charIndex = 0;
+      let cursorVisible = true;
+
+      function paint(text) {
+        output.innerHTML = `${text}<span id="blink">${cursorVisible ? "_" : ""}</span>`;
+      }
+
+      function typeNext() {
+        paint(inputText.slice(0, charIndex));
+        charIndex++;
+
+        if (charIndex <= inputText.length) {
+          setTimeout(typeNext, 260);
+        } else {
+          setInterval(() => {
+            cursorVisible = !cursorVisible;
+            paint(inputText);
+          }, 360);
+        }
+      }
+
+      typeNext();
+    }
+
+    window.addEventListener("load", () => {
+      startHeartAnimation();
+      startTyping();
+    });
+  </script>
+</body>
+</html>
